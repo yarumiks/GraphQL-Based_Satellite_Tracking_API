@@ -27,11 +27,10 @@ namespace SatellitesQL.Serfvice
         public async Task<TLEResult> GetTLEAsync(int id)
         {
             string req = $"{_url}/tle/{id}&apiKey={_key}";
-
             var response = await _httpClient.GetFromJsonAsync<TLEResult>(req);
             return response;
         }
-
+       
 
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace SatellitesQL.Response
+namespace SatellitesQL.Response.Types.Abstract
 {
     public interface Iinfo
     {
