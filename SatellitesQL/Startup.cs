@@ -1,15 +1,23 @@
-﻿using SatellitesQL.LocalDefinedSatellites;
+﻿using Microsoft.AspNetCore.Builder;
+using SatellitesQL.LocalDefinedSatellites;
+using SatellitesQL.Request;
 using SatellitesQL.Response;
+using SatellitesQL.Response.Types;
 using SatellitesQL.Response.Types.Abstract;
 using SatellitesQL.Schema;
 using SatellitesQL.Schema.Mutations;
+using SatellitesQL.Schema.Subscriptions;
 using SatellitesQL.Serfvice;
+using System.Net.WebSockets;
+using System.Text;
 using static SatellitesQL.Serfvice.SatelliteCategories;
+using JsonType = SatellitesQL.LocalDefinedSatellites.JsonType;
 
 namespace SatellitesQL
 {
     public class Startup
     {
+     
         private readonly IConfiguration _configuration;
 
         public Startup(IConfiguration configuration)
@@ -21,15 +29,31 @@ namespace SatellitesQL
         {
             services.AddHttpClient<N2YOService>();
             services.AddSingleton<N2YOService>();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", policy =>
+                {
+                    policy.AllowAnyOrigin()
+                          .AllowAnyMethod()
+                          .AllowAnyHeader();
+                });
 
-            services.AddGraphQLServer()
+            });
+                services.AddGraphQLServer()
+                    .AddType<SatelliteCategoryType>()
+                    .AddType<InputObjectType<PositionRequest>>()
+                    .AddType<InputObjectType<CurrentObserver>>()
+                    .AddType<ObjectType<JsonType>>()
+                    .AddType<ObjectType<JsonValue>>()
                     .AddQueryType<Query>()
                     .AddMutationType<SatelliteMutation>()
-                    .AddType<SatelliteCategoryType>()
-                    .AddType<ObjectType<JsonType>>()
-                    .AddType<ObjectType<JsonValue>>();
+                    .AddSubscriptionType<SatelliteSubscription>()
+                    .AddInMemorySubscriptions()
+                    .InitializeOnStartup();
 
-        }
+
+                services.AddSingleton<PositionPublisher>();
+           }
 
         public void Configure(IApplicationBuilder app, IHostEnvironment env)
         {
@@ -38,13 +62,26 @@ namespace SatellitesQL
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseRouting();
-
             app.UseWebSockets();
 
+
+            app.UseRouting();
+            
+            app.UseGraphQLAltair();
+
+            //banana cake pop UI close
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGraphQL();
+                endpoints.MapGraphQL().WithOptions(new HotChocolate.AspNetCore.GraphQLServerOptions
+                {
+                    Tool = { Enable = false } 
+                });
+            });
+
+            //altair UI config
+            app.UseGraphQLAltair("/ui/altair", new GraphQL.Server.Ui.Altair.AltairOptions
+            {
+                GraphQLEndPoint = "/graphql"
             });
         }
     }

@@ -14,7 +14,7 @@ namespace SatellitesQL.Schema.Mutations
         {
             path = System.IO.Path.Combine(AppContext.BaseDirectory, "LocalDefinedSatellites/Satellitesjson.json");
         }
-        public JsonType AddSatellite([GraphQLType(typeof(SatelliteCategoryType))] SatelliteCategory name,List<int>? noradIds)
+        public LocalDefinedSatellites.JsonType AddSatellite([GraphQLType(typeof(SatelliteCategoryType))] SatelliteCategory name,List<int>? noradIds)
         {
             LocalDefinedSatellites.JsonValue satellites;
 
@@ -46,7 +46,7 @@ namespace SatellitesQL.Schema.Mutations
             }
             else
             {
-                var newDatas = new JsonType
+                var newDatas = new LocalDefinedSatellites.JsonType
                 {
                     Name = name.ToString(),
                     NoradIds = noradIds ?? new List<int>()

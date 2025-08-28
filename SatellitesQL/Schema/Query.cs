@@ -1,11 +1,16 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.DataProtection.KeyManagement;
+using Newtonsoft.Json;
 using SatellitesQL.LocalDefinedSatellites;
 using SatellitesQL.Request;
 using SatellitesQL.Response;
+using SatellitesQL.Response.Types;
 using SatellitesQL.Serfvice;
 using System;
 using System.Configuration;
+using System.Net.Http;
+using System.Runtime.CompilerServices;
 using System.Text.Json.Nodes;
+using JsonType = SatellitesQL.LocalDefinedSatellites.JsonType;
 
 namespace SatellitesQL.Schema
 {
@@ -49,6 +54,8 @@ namespace SatellitesQL.Schema
         {
             return _n2yoService.GetPositionAsync(position);
         }
+
+       
 
         public Task<VisualPassResult> GetVisualVisibility(VisualPassRequest visualP)
         {
