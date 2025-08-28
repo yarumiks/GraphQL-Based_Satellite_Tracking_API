@@ -1,6 +1,6 @@
 ﻿using SatellitesQL.Response;
 
-namespace SatellitesQL.Serfvice
+namespace SatellitesQL.Response.Types.Abstract
 {
     public interface In2yo
     {

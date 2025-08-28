@@ -1,4 +1,6 @@
-﻿namespace SatellitesQL.Request
+﻿using SatellitesQL.Response.Types;
+
+namespace SatellitesQL.Request
 {
     public class PositionRequest
     {

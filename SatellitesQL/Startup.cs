@@ -1,5 +1,10 @@
-﻿using SatellitesQL.Schema;
+﻿using SatellitesQL.LocalDefinedSatellites;
+using SatellitesQL.Response;
+using SatellitesQL.Response.Types.Abstract;
+using SatellitesQL.Schema;
+using SatellitesQL.Schema.Mutations;
 using SatellitesQL.Serfvice;
+using static SatellitesQL.Serfvice.SatelliteCategories;
 
 namespace SatellitesQL
 {
@@ -19,8 +24,10 @@ namespace SatellitesQL
 
             services.AddGraphQLServer()
                     .AddQueryType<Query>()
-                    .AddType<TLEQuery>();
-
+                    .AddMutationType<SatelliteMutation>()
+                    .AddType<SatelliteCategoryType>()
+                    .AddType<ObjectType<JsonType>>()
+                    .AddType<ObjectType<JsonValue>>();
 
         }
 
@@ -31,10 +38,8 @@ namespace SatellitesQL
                 app.UseDeveloperExceptionPage();
             }
 
-
             app.UseRouting();
 
-            //use for Subscriptions
             app.UseWebSockets();
 
             app.UseEndpoints(endpoints =>

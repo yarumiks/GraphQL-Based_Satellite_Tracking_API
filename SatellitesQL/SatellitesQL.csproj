@@ -12,4 +12,8 @@
     <PackageReference Include="HotChocolate.AspNetCore" Version="12.6.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Schema\Subscriptions\" />
+  </ItemGroup>
+
 </Project>

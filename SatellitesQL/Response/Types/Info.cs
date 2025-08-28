@@ -6,7 +6,6 @@ namespace SatellitesQL.Response.Types
     {
         public int SatId { get; set; }
         public string SatName { get; set; }
-
         public int TransactionsCount { get; set; }
     }
 }
