@@ -1,10 +1,76 @@
-﻿using System.ComponentModel;
+﻿using SatellitesQL.LocalDefinedSatellites;
+using SatellitesQL.Response.Types;
+using System.ComponentModel;
+using System.Text.Json;
+using System.Text.RegularExpressions;
 using static SatellitesQL.Serfvice.SatelliteCategories;
+using JsonType = SatellitesQL.LocalDefinedSatellites.JsonType;
 
 namespace SatellitesQL.Serfvice
 {
     public static class SatelliteCategories
     {
+
+        public static List<JsonType> categoryType;
+
+        //public static readonly Dictionary<SatelliteCategories.SatelliteCategory, string> EnumToJsonName = new()
+        //{
+        //    { SatelliteCategories.SatelliteCategory.ISS, "ISS" },
+        //    { SatelliteCategories.SatelliteCategory.Weather, "Weather" },
+        //    { SatelliteCategories.SatelliteCategory.NOAA, "NOAA" },
+        //    { SatelliteCategories.SatelliteCategory.GOES, "GOES" },
+        //    { SatelliteCategories.SatelliteCategory.EarthResources, "EarthResources" },
+        //    { SatelliteCategories.SatelliteCategory.SearchAndRescue, "SearchAndRescue" },
+        //    { SatelliteCategories.SatelliteCategory.DisasterMonitoring, "DisasterMonitoring" },
+        //    { SatelliteCategories.SatelliteCategory.TrackingAndDataRelaySatelliteSystem, "TrackingAndDataRelaySatelliteSystem" },
+        //    { SatelliteCategories.SatelliteCategory.Geostationary, "Geostationary" },
+        //    { SatelliteCategories.SatelliteCategory.Intelsat, "Intelsat" },
+        //    { SatelliteCategories.SatelliteCategory.Gorizont, "Gorizont" },
+        //    { SatelliteCategories.SatelliteCategory.Raduga, "Raduga" },
+        //    { SatelliteCategories.SatelliteCategory.Molniya, "Molniya" },
+        //    { SatelliteCategories.SatelliteCategory.Iridium, "Iridium" },
+        //    { SatelliteCategories.SatelliteCategory.Orbcomm, "Orbcomm" },
+        //    { SatelliteCategories.SatelliteCategory.Globalstar, "Globalstar" },
+        //    { SatelliteCategories.SatelliteCategory.AmateurRadio, "AmateurRadio" },
+        //    { SatelliteCategories.SatelliteCategory.Experimental, "Experimental" },
+        //    { SatelliteCategories.SatelliteCategory.GPSOperational, "GPSOperational" },
+        //    { SatelliteCategories.SatelliteCategory.GlonassOperational, "GlonassOperational" },
+        //    { SatelliteCategories.SatelliteCategory.Galileo, "Galileo" },
+        //    { SatelliteCategories.SatelliteCategory.SatelliteBasedAugmentationSystem, "SatelliteBasedAugmentationSystem" },
+        //    { SatelliteCategories.SatelliteCategory.NavyNavigationSatelliteSystem, "NavyNavigationSatelliteSystem" },
+        //    { SatelliteCategories.SatelliteCategory.RussianLEONavigation, "RussianLEONavigation" },
+        //    { SatelliteCategories.SatelliteCategory.SpaceAndEarthScience, "SpaceAndEarthScience" },
+        //    { SatelliteCategories.SatelliteCategory.Geodetic, "Geodetic" },
+        //    { SatelliteCategories.SatelliteCategory.Engineering, "Engineering" },
+        //    { SatelliteCategories.SatelliteCategory.Education, "Education" },
+        //    { SatelliteCategories.SatelliteCategory.Military, "Military" },
+        //    { SatelliteCategories.SatelliteCategory.RadarCalibration, "RadarCalibration" },
+        //    { SatelliteCategories.SatelliteCategory.CubeSats, "CubeSats" },
+        //    { SatelliteCategories.SatelliteCategory.XMAndSirius, "XMAndSirius" },
+        //    { SatelliteCategories.SatelliteCategory.TV, "TV" },
+        //    { SatelliteCategories.SatelliteCategory.BeidouNavigationSystem, "BeidouNavigationSystem" },
+        //    { SatelliteCategories.SatelliteCategory.Yaogan, "Yaogan" },
+        //    { SatelliteCategories.SatelliteCategory.WestfordNeedles, "WestfordNeedles" },
+        //    { SatelliteCategories.SatelliteCategory.Parus, "Parus" },
+        //    { SatelliteCategories.SatelliteCategory.Strela, "Strela" },
+        //    { SatelliteCategories.SatelliteCategory.Gonets, "Gonets" },
+        //    { SatelliteCategories.SatelliteCategory.Tsiklon, "Tsiklon" },
+        //    { SatelliteCategories.SatelliteCategory.Tsikada, "Tsikada" },
+        //    { SatelliteCategories.SatelliteCategory.O3BNetworks, "O3BNetworks" },
+        //    { SatelliteCategories.SatelliteCategory.Tselina, "Tselina" },
+        //    { SatelliteCategories.SatelliteCategory.Celestis, "Celestis" },
+        //    { SatelliteCategories.SatelliteCategory.IRNSS, "IRNSS" },
+        //    { SatelliteCategories.SatelliteCategory.QZSS, "QZSS" },
+        //    { SatelliteCategories.SatelliteCategory.Flock, "Flock" },
+        //    { SatelliteCategories.SatelliteCategory.Lemur, "Lemur" },
+        //    { SatelliteCategories.SatelliteCategory.GPSConstellation, "Global Positioning System(GPS) Constellation" },
+        //    { SatelliteCategories.SatelliteCategory.GlonassConstellation, "GlonassConstellation" },
+        //    { SatelliteCategories.SatelliteCategory.Starlink, "Starlink" },
+        //    { SatelliteCategories.SatelliteCategory.OneWeb, "OneWeb" },
+        //    { SatelliteCategories.SatelliteCategory.ChineseSpaceStation, "ChineseSpaceStation" },
+        //    { SatelliteCategories.SatelliteCategory.Qianfan, "Qianfan" },
+        //    { SatelliteCategories.SatelliteCategory.Kuiper, "Kuiper" }
+        //};
 
         [EnumType]
         public enum SatelliteCategory
@@ -70,70 +136,6 @@ namespace SatellitesQL.Serfvice
         {
             return (int)value;
         }
-    }
-
-    public class SatelliteCategoryType : EnumType<SatelliteCategory>
-    {
-        protected override void Configure(IEnumTypeDescriptor<SatelliteCategory> descriptor)
-        {
-            descriptor.Value(SatelliteCategory.ISS).Name("ISS");
-            descriptor.Value(SatelliteCategory.Weather).Name("Weather");
-            descriptor.Value(SatelliteCategory.NOAA).Name("NOAA");
-            descriptor.Value(SatelliteCategory.GOES).Name("GOES");
-            descriptor.Value(SatelliteCategory.EarthResources).Name("EarthResources");
-            descriptor.Value(SatelliteCategory.SearchAndRescue).Name("SearchAndRescue");
-            descriptor.Value(SatelliteCategory.DisasterMonitoring).Name("DisasterMonitoring");
-            descriptor.Value(SatelliteCategory.TrackingAndDataRelaySatelliteSystem).Name("TrackingAndDataRelaySatelliteSystem");
-            descriptor.Value(SatelliteCategory.Geostationary).Name("Geostationary");
-            descriptor.Value(SatelliteCategory.Intelsat).Name("Intelsat");
-            descriptor.Value(SatelliteCategory.Gorizont).Name("Gorizont");
-            descriptor.Value(SatelliteCategory.Raduga).Name("Raduga");
-            descriptor.Value(SatelliteCategory.Molniya).Name("Molniya");
-            descriptor.Value(SatelliteCategory.Iridium).Name("Iridium");
-            descriptor.Value(SatelliteCategory.Orbcomm).Name("Orbcomm");
-            descriptor.Value(SatelliteCategory.Globalstar).Name("Globalstar");
-            descriptor.Value(SatelliteCategory.AmateurRadio).Name("AmateurRadio");
-            descriptor.Value(SatelliteCategory.Experimental).Name("Experimental");
-            descriptor.Value(SatelliteCategory.GPSOperational).Name("GPSOperational");
-            descriptor.Value(SatelliteCategory.GlonassOperational).Name("GlonassOperational");
-            descriptor.Value(SatelliteCategory.Galileo).Name("Galileo");
-            descriptor.Value(SatelliteCategory.SatelliteBasedAugmentationSystem).Name("SatelliteBasedAugmentationSystem");
-            descriptor.Value(SatelliteCategory.NavyNavigationSatelliteSystem).Name("NavyNavigationSatelliteSystem");
-            descriptor.Value(SatelliteCategory.RussianLEONavigation).Name("RussianLEONavigation");
-            descriptor.Value(SatelliteCategory.SpaceAndEarthScience).Name("SpaceAndEarthScience");
-            descriptor.Value(SatelliteCategory.Geodetic).Name("Geodetic");
-            descriptor.Value(SatelliteCategory.Engineering).Name("Engineering");
-            descriptor.Value(SatelliteCategory.Education).Name("Education");
-            descriptor.Value(SatelliteCategory.Military).Name("Military");
-            descriptor.Value(SatelliteCategory.RadarCalibration).Name("RadarCalibration");
-            descriptor.Value(SatelliteCategory.CubeSats).Name("CubeSats");
-            descriptor.Value(SatelliteCategory.XMAndSirius).Name("XMAndSirius");
-            descriptor.Value(SatelliteCategory.TV).Name("TV");
-            descriptor.Value(SatelliteCategory.BeidouNavigationSystem).Name("BeidouNavigationSystem");
-            descriptor.Value(SatelliteCategory.Yaogan).Name("Yaogan");
-            descriptor.Value(SatelliteCategory.WestfordNeedles).Name("WestfordNeedles");
-            descriptor.Value(SatelliteCategory.Parus).Name("Parus");
-            descriptor.Value(SatelliteCategory.Strela).Name("Strela");
-            descriptor.Value(SatelliteCategory.Gonets).Name("Gonets");
-            descriptor.Value(SatelliteCategory.Tsiklon).Name("Tsiklon");
-            descriptor.Value(SatelliteCategory.Tsikada).Name("Tsikada");
-            descriptor.Value(SatelliteCategory.O3BNetworks).Name("O3BNetworks");
-            descriptor.Value(SatelliteCategory.Tselina).Name("Tselina");
-            descriptor.Value(SatelliteCategory.Celestis).Name("Celestis");
-            descriptor.Value(SatelliteCategory.IRNSS).Name("IRNSS");
-            descriptor.Value(SatelliteCategory.QZSS).Name("QZSS");
-            descriptor.Value(SatelliteCategory.Flock).Name("Flock");
-            descriptor.Value(SatelliteCategory.Lemur).Name("Lemur");
-            descriptor.Value(SatelliteCategory.GPSConstellation).Name("GPSConstellation");
-            descriptor.Value(SatelliteCategory.GlonassConstellation).Name("GlonassConstellation");
-            descriptor.Value(SatelliteCategory.Starlink).Name("Starlink");
-            descriptor.Value(SatelliteCategory.OneWeb).Name("OneWeb");
-            descriptor.Value(SatelliteCategory.ChineseSpaceStation).Name("ChineseSpaceStation");
-            descriptor.Value(SatelliteCategory.Qianfan).Name("Qianfan");
-            descriptor.Value(SatelliteCategory.Kuiper).Name("Kuiper");
-        }
-
-
     }
 
 }

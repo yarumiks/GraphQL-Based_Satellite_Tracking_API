@@ -27,6 +27,8 @@ namespace SatellitesQL
 
         public void ConfigureServices(IServiceCollection services)
         {
+            //SatelliteCategories.LoadGroups("satellites.json");
+            
             services.AddHttpClient<N2YOService>();
             
             services.AddSingleton<N2YOService>();

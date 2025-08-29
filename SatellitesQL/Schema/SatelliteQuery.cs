@@ -54,8 +54,6 @@ namespace SatellitesQL.Schema
             return _n2yoService.GetPositionAsync(position);
         }
 
-
-
         public Task<VisualPassResult> GetVisualVisibility(VisualPassRequest visualP)
         {
             return _n2yoService.GetSatelliteVisibilityAsync(visualP);

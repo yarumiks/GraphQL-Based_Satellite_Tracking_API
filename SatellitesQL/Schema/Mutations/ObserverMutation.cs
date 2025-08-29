@@ -9,11 +9,16 @@ namespace SatellitesQL.Schema.Mutations
     {
         public async Task<ObserverService> SetObserverLocation(
                 [Service] IObserverService observerService,
-                double latitude,
-                double longitude,
-                double altitude)
+                float latitude,
+                float longitude,
+                float altitude)
         {
-            var observer = new CurrentObserver();
+            var observer = new CurrentObserver()
+            {
+                ObserverAlt = altitude,
+                ObserverLat = latitude,
+                ObserverLng = longitude
+            };
             observerService.CurrentObserver = observer;
 
             return (ObserverService)observerService;

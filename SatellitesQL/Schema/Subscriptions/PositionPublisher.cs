@@ -22,12 +22,11 @@ namespace SatellitesQL.Schema.Subscriptions
         {
             _httpClientFactory = httpClientFactory;
             _url = config["N2YO:BaseUrl"];
-            // _sender = sender;
             _key = config["apiKey"];
         }
         public async IAsyncEnumerable<PositionResult> SubscribePosition(PositionRequest position, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
-            int seconds = position.Seconds;
+            int seconds = 1;
 
             var client = _httpClientFactory.CreateClient();
 
@@ -58,6 +57,7 @@ namespace SatellitesQL.Schema.Subscriptions
                 ++seconds;
                 await Task.Delay(2000, cancellationToken);
             }
+        
         }
     }
 }

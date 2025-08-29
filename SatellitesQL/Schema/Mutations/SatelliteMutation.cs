@@ -1,6 +1,7 @@
 ﻿using HotChocolate.Types.Relay;
 using Newtonsoft.Json;
 using SatellitesQL.LocalDefinedSatellites;
+using SatellitesQL.Response.Types;
 using SatellitesQL.Serfvice;
 using System.Text.Json.Nodes;
 using static SatellitesQL.Serfvice.SatelliteCategories;
