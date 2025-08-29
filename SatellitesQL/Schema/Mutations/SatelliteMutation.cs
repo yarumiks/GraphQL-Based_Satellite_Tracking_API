@@ -7,6 +7,7 @@ using static SatellitesQL.Serfvice.SatelliteCategories;
 
 namespace SatellitesQL.Schema.Mutations
 {
+    [ExtendObjectType(OperationTypeNames.Mutation)]
     public class SatelliteMutation
     {
         string path;

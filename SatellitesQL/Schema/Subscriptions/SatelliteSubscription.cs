@@ -19,7 +19,7 @@ namespace SatellitesQL.Schema.Subscriptions
     public class SatelliteSubscription
     {
         [SubscribeAndResolve]
-        public async IAsyncEnumerable<Position> OnPositionUpdated(
+        public async IAsyncEnumerable<PositionResult> OnPositionUpdated(
         PositionRequest request,
         [EnumeratorCancellation] CancellationToken cancellationToken,
         [Service] PositionPublisher publisher)

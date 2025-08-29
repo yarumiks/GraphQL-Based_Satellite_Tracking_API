@@ -38,7 +38,7 @@
     "Graphql.NET": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "/ui/altair",
+      "launchUrl": "ui/altair",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

@@ -17,7 +17,7 @@ namespace SatellitesQL
 {
     public class Startup
     {
-     
+
         private readonly IConfiguration _configuration;
 
         public Startup(IConfiguration configuration)
@@ -28,7 +28,11 @@ namespace SatellitesQL
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddHttpClient<N2YOService>();
+            
             services.AddSingleton<N2YOService>();
+            services.AddSingleton<IObserverService, ObserverService>();
+            services.AddSingleton<PositionPublisher>();
+
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowAll", policy =>
@@ -39,21 +43,24 @@ namespace SatellitesQL
                 });
 
             });
-                services.AddGraphQLServer()
-                    .AddType<SatelliteCategoryType>()
-                    .AddType<InputObjectType<PositionRequest>>()
-                    .AddType<InputObjectType<CurrentObserver>>()
-                    .AddType<ObjectType<JsonType>>()
-                    .AddType<ObjectType<JsonValue>>()
-                    .AddQueryType<Query>()
-                    .AddMutationType<SatelliteMutation>()
-                    .AddSubscriptionType<SatelliteSubscription>()
-                    .AddInMemorySubscriptions()
-                    .InitializeOnStartup();
 
+            services.AddGraphQLServer()
+                .AddType<SatelliteCategoryType>()
+                .AddType<InputObjectType<PositionRequest>>()
+                .AddType<InputObjectType<CurrentObserver>>()
+                .AddType<ObjectType<JsonType>>()
+                .AddType<ObjectType<JsonValue>>()
+                .AddQueryType<Query>()
+                .AddTypeExtension<ObserverQuery>()
+                .AddTypeExtension<SatelliteQuery>()
+                .AddMutationType<Mutation>()
+                .AddTypeExtension<ObserverMutation>()
+                .AddTypeExtension<SatelliteMutation>()
+                .AddSubscriptionType<SatelliteSubscription>()
+                .AddInMemorySubscriptions()
+                .InitializeOnStartup();
 
-                services.AddSingleton<PositionPublisher>();
-           }
+        }
 
         public void Configure(IApplicationBuilder app, IHostEnvironment env)
         {
@@ -66,7 +73,7 @@ namespace SatellitesQL
 
 
             app.UseRouting();
-            
+
             app.UseGraphQLAltair();
 
             //banana cake pop UI close
@@ -74,7 +81,7 @@ namespace SatellitesQL
             {
                 endpoints.MapGraphQL().WithOptions(new HotChocolate.AspNetCore.GraphQLServerOptions
                 {
-                    Tool = { Enable = false } 
+                    Tool = { Enable = false }
                 });
             });
 
