@@ -5,7 +5,7 @@ namespace SatellitesQL.Response
 {
     public class RadioPassResult
     {
-        public IPassInfo Info { get; set; }
-        public IEnumerable<RadioPass> RadioPass {  get; set; }
+        public PassInfo Info { get; set; }
+        public IEnumerable<RadioPass> Passes {  get; set; }
     }
 }
