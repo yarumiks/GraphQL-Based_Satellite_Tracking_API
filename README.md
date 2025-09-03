@@ -8,7 +8,7 @@ The service wraps N2YO’s satellite data with GraphQL, providing information on
 
 
 
-# 📌 Accessing Satellite IDs
+#  Accessing Satellite IDs
 Most queries require satellite NORAD IDs. While the API doesn’t provide them directly, N2YO’s satellite catalog lists types and totals.
 
 The application also includes a local JSON file with IDs. You can inspect it manually or query by category to retrieve IDs.
@@ -39,11 +39,11 @@ Response:
 <br></br>
 >⚠️ Since the ID values in the local JSON file are manually defined by the program, not every category may have IDs. However, you can easily add ID values for any new categories you need. Below, the steps to do this are explained.
 <br></br>
-# 📌 Working with the Local Data File
+#  Working with the Local Data File
 In the application, some categories may not have satellite IDs (NORAD IDs) in the local JSON file. In such cases, 
 the following queries and mutations can be used to add new values or update existing ones.
 
-## 1️⃣ Check IDs
+## 1) Check IDs
 For example, if you run a query for the AmateurRadio category and no IDs exist:
 
 ```graphql
@@ -68,7 +68,7 @@ Response:
   ]
 }
 ```
-## 2️⃣ Adding New IDs
+## 2) Adding New IDs
 You can add NORAD ID values obtained from the N2YO website using the following mutation:
 
 Single ID:
@@ -89,7 +89,7 @@ mutation {
   }
 }
 ```
-## 3️⃣ Check After Adding New IDs
+## 3) Check After Adding New IDs
 When you run the query again:
 
 ```graphql
@@ -107,7 +107,7 @@ When you run the query again:
   }
 }
 ```
-## 4️⃣ Optional: Remove or Update IDs
+## 4) Optional: Remove or Update IDs
 
 Remove:
 
@@ -124,7 +124,7 @@ mutation {
 }
 ```
 <br></br>
-# 📌 TLE (Two-Line Element) Data
+#  TLE (Two-Line Element) Data
 TLE (Two-Line Element) is a standard format used to describe the orbital elements of a satellite. These elements allow the calculation of the satellite's position and velocity at any given time.
 ```graphql
   query{
@@ -139,31 +139,16 @@ TLE (Two-Line Element) is a standard format used to describe the orbital element
   }
 ```
 
-Response:
-```graphql
-{
-  "data": {
-    "tle": {
-      "info": {
-        "satId": 47486,
-        "satName": "CELESTIS 17/SHERPA-FX1",
-        "transactionsCount": 0
-      },
-      "tle": "1 47486U 21006CB  25246.00898656  .00011771  00000-0  43389-3 0  9996\r\n2 47486  97.2706 289.0245 0008531 133.2503 226.9451 15.27923341255385"
-    }
-  }
-}
-```
 <br></br>
 
-# 📌 Satellite Passes
+#  Satellite Passes
 The N2YO API provides two types of satellite pass information for a given observer location:
 
-## 1️⃣ Radio Passes
+## 1) Radio Passes
 
 Radio passes indicate the times when a satellite is above the horizon and can be tracked via radio signals. These are useful for amateur radio operators or telemetry reception.
 
-## 2️⃣ Visual Passes
+## 2) Visual Passes
 
 Visual passes indicate the times when a satellite is visible in the sky to the naked eye, usually at dawn or dusk when the satellite is illuminated by the sun but the observer is in darkness. These are useful for observation and photography.
 
@@ -246,3 +231,21 @@ query{
   }
 ```
 <br></br>
+# Real-Time Tracking Positions
+You can receive real-time satellite position updates using GraphQL subscriptions. Once subscribed, the client will automatically receive periodic updates.
+```graphql
+subscription {
+  onPositionUpdated(request: { id: 45054 }) {
+    info {
+      satId
+      satName
+    }
+    positions {
+      latitude
+      longitude
+      altitude
+    }
+  }
+}
+```
+
